@@ -55,7 +55,7 @@ public class Music {
 	//Default Constructors
 	
 	public Music(){	
-		Library.numberOfSongs++;
+		Library.setNumberOfSongs(Library.getNumberOfSongs()+1);
 		songId=numberOfSongs;
 		
 		

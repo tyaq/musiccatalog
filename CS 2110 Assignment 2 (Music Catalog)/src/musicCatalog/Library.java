@@ -8,10 +8,10 @@ public class Library {
 	private String libraryName;
 	
 	//Accessory Methods
-	public int getNumberOfSongs() { //For numberOfSongs
+	static int getNumberOfSongs() { //For numberOfSongs
 		return numberOfSongs;
 	}
-	public int getNumberOfGenres() {
+	public static int getNumberOfGenres() {
 		return numberOfGenres;
 	}
 	public String getLibraryNames() {
@@ -19,10 +19,10 @@ public class Library {
 	}
 	
 	//Mutator Methods
-	public void setNumberOfSongs(int number) {
+	static void setNumberOfSongs(int number) {
 		numberOfSongs = number;
 	}
-	public void setNumberOfGenres(int number) {
+	public static void setNumberOfGenres(int number) {
 		numberOfGenres = number;
 	}
 	public void setLibraryName(String name) {
