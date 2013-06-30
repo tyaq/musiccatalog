@@ -2,11 +2,12 @@ package musicCatalog;
 
 public class Music {
 	
-	private int songId;	
+	private int songId=1;	
 	private String title;
-	private String genre;
+	private static String genre;
 	private String comment;
 	private double duration;
+	private int year;
 	
 	//Accessory Methods
 	public int getSongId(){
@@ -24,6 +25,9 @@ public class Music {
 	public double getDuration(){
 		return duration;
 	}
+	public int getYear(){
+		return year;
+	}
 	
 	//Mutator Methods
 	public void setSongId(int number){
@@ -35,5 +39,28 @@ public class Music {
 	public void setGenre(String type){
 		genre = type;
 	}
+	
+	public void setComment(String comment){
+		this.comment = comment;
+	}
+	
+	public void setDuration(double time){
+		duration=time;
+	}
+	
+	public void setYear(int year){
+		this.year=year;
+	}
+	
+	//Default Constructors
+	
+	public Music(){	
+		Library.numberOfSongs++;
+		songId=numberOfSongs;
+		
+		
+		
+	}
+	
 
 }
