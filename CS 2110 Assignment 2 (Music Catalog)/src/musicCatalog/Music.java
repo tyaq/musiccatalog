@@ -8,8 +8,8 @@ public class Music {
 	private String comment;
 	private double duration;
 	
-	//Accessor Comments
-	public int getId(){
+	//Accessory Methods
+	public int getSongId(){
 		return songId;
 	}
 	public String getTitle(){
@@ -25,6 +25,15 @@ public class Music {
 		return duration;
 	}
 	
-	
+	//Mutator Methods
+	public void setSongId(int number){
+		songId= number;
+	}
+	public void setTitle(String title){
+		this.title = title;
+	}
+	public void setGenre(String type){
+		genre = type;
+	}
 
 }

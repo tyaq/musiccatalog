@@ -18,6 +18,16 @@ public class Library {
 		return libraryName;
 	}
 	
+	//Mutator Methods
+	public void setNumberOfSongs(int number) {
+		numberOfSongs = number;
+	}
+	public void setNumberOfGenres(int number) {
+		numberOfGenres = number;
+	}
+	public void setLibraryName(String name) {
+		libraryName = name;
+	}
 	
 	
 	
