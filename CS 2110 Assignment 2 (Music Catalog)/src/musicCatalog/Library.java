@@ -9,7 +9,7 @@ public class Library {
 	private static int numberOfSongs = 0;
 	private static int numberOfGenres = 0;
 	private String libraryName;
-	HashMap<String, String> songs;
+	HashMap<String, Object> songs;
 	
 	//Accessory Methods
 	static int getNumberOfSongs() { //For numberOfSongs
@@ -43,6 +43,11 @@ public class Library {
 		
 	}
 	
+	//For asking what the user wants to do like a main menu
+	public void promptMain() {
+		
+	}
+	
 	//To add a song to the catalog
 	public void addSong() throws IOException {
 		
@@ -53,15 +58,11 @@ public class Library {
 		//Check to see if a song by that name already exists and if it does ask to edit, and if not create new object
 		if (songs.containsKey(songName)){
 			Catalog.out.println("Hmm... I think you already added this song. Is this it?");
-			String objectName = songs.get(songName);
-			Catalog.out.println(objectName.toString());
+			Object songObject = songs.get(songName);
+			Catalog.out.println(songObject.toString());
 			String response = Catalog.in.readLine();
 			if (response.equalsIgnoreCase("yes")){
-				Catalog.out.println("Would you like to edit this?");
-				String response = Catalog.in.resdline();
-				if (response.equalsIgnoreCase("yes")){
-					objectName.editSong();
-				}//Close check if want to edit
+				checkIfEdit(songObject);
 			}//Close check if same song
 		}//Close check is already added if
 		
@@ -83,7 +84,7 @@ public class Library {
 		
 	}
 	
-	public void editSong() {
+	public void editSong(Object song) {
 		
 	}
 	
@@ -93,23 +94,24 @@ public class Library {
 	}
 	
 	//To Check if user wants to edit a song in database
-	public void checkIfEdit(String objectName){
+	public void checkIfEdit(Object song) throws IOException{
 		Catalog.out.println("Would you like to edit this?");
-		String response = Catalog.in.readLine();
+		String response;
+			response = Catalog.in.readLine();
 		if (response.equalsIgnoreCase("yes")){//Yes? then go to edit method
-			objectName.editSong();
+			editSong(song);
 		} else if (response.equalsIgnoreCase("no")){//No? then go main menu
-			break;
+			promptMain();
 		} else {//If neither then take them back to main menu
 			Catalog.out.println("I'm sorry I didn't understand: " + response + 
 					"\nI was looking for \"Yes\" or \"No\".");
-			break;
+			promptMain();
 		}//Close check if want to edit
 	}//Close checkIfEdit Method
 
 	//Constructor Method
 	public Library() {
-		songs = new  HashMap<String, String>();
+		songs = new  HashMap<String, Object>();
 	}
 	
 	
