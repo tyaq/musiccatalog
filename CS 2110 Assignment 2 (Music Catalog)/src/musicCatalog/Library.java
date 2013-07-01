@@ -56,15 +56,7 @@ public class Library {
 		String songName = Catalog.in.readLine();
 		
 		//Check to see if a song by that name already exists and if it does ask to edit, and if not create new object
-		if (songs.containsKey(songName)){
-			Catalog.out.println("Hmm... I think you already added this song. Is this it?");
-			Object songObject = songs.get(songName);
-			Catalog.out.println(songObject.toString());
-			String response = Catalog.in.readLine();
-			if (response.equalsIgnoreCase("yes")){
-				checkIfEdit(songObject);
-			}//Close check if same song
-		}//Close check is already added if
+		checkIfContained(songName);
 		
 		Catalog.out.println("What is the name of the Artist or Composer?");
 		String songArtist = Catalog.in.readLine();
@@ -93,8 +85,32 @@ public class Library {
 		
 	}
 	
+	public void checkIfContained(String songName) throws IOException {
+		System.out.println("<--checkIfContained-->");
+		if (songs.containsKey(songName)){
+			Catalog.out.println("Hmm... I think you already added this song. Is this it?");
+			Object songObject = songs.get(songName);
+			Catalog.out.println(songObject.toString());
+			String response = Catalog.in.readLine();
+			checkIfSameSong(response,songObject);
+		}//Close check is already added if
+	}
+	
+	public void checkIfSameSong(String response,Object song) throws IOException {
+		System.out.println("<--checkIfSameSong-->");//For Debugging
+		if (response.equalsIgnoreCase("yes")){
+			checkIfEdit(song);
+		} else if (response.equalsIgnoreCase("no")) {
+			Catalog.out.println("So this is a new song.");
+			newSong();//Call method that asks user for input on song info not knowing genre
+		} else {
+			notUnderstandable(response);
+		}//Close check if same song
+	}//Close checkIfSameSong method
+	
 	//To Check if user wants to edit a song in database
 	public void checkIfEdit(Object song) throws IOException{
+		System.out.println("-->Library.checkIfEdit()<--");//For Debugging
 		Catalog.out.println("Would you like to edit this?");
 		String response;
 			response = Catalog.in.readLine();
@@ -103,12 +119,16 @@ public class Library {
 		} else if (response.equalsIgnoreCase("no")){//No? then go main menu
 			promptMain();
 		} else {//If neither then take them back to main menu
-			Catalog.out.println("I'm sorry I didn't understand: " + response + 
-					"\nI was looking for \"Yes\" or \"No\".");
-			promptMain();
+			notUnderstandable(response);
 		}//Close check if want to edit
 	}//Close checkIfEdit Method
 
+	public void notUnderstandable(String response) {
+		System.out.println("<--notUnderstandable-->");//For Debugging
+		Catalog.out.println("I'm sorry I didn't understand: " + response + 
+				"\nI was looking for \"Yes\" or \"No\".");
+		promptMain();
+	}
 	//Constructor Method
 	public Library() {
 		songs = new  HashMap<String, Object>();
