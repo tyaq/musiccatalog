@@ -1,5 +1,7 @@
 package musicCatalog;
 
+import java.io.IOException;
+
 public class Library {
 	
 	//Declare Variables To Hold Information About the Library 
@@ -42,6 +44,14 @@ public class Library {
 	//To add a song to the catalog
 	public void addSongs() {
 		Catalog.out.println("What is the name of the Artist or Composer?");
+		try {
+			Catalog.in.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+		}
 	}
 	
 	//To remove a song from the catalog
@@ -58,4 +68,7 @@ public class Library {
 	public Library() {
 		
 	}
+	
+	
+	
 }//Close Library Class
