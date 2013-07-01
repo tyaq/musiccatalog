@@ -1,6 +1,7 @@
 package musicCatalog;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class Library {
 	
@@ -8,6 +9,7 @@ public class Library {
 	private static int numberOfSongs = 0;
 	private static int numberOfGenres = 0;
 	private String libraryName;
+	HashMap<String, String> songs;
 	
 	//Accessory Methods
 	static int getNumberOfSongs() { //For numberOfSongs
@@ -42,20 +44,46 @@ public class Library {
 	}
 	
 	//To add a song to the catalog
-	public void addSongs() {
+	public void addSong() throws IOException {
+		
+		//Ask for and Artist as a reference and the Name of the song
+		Catalog.out.println("What is the name of the Song?");
+		String songName = Catalog.in.readLine();
+		
+		//Check to see if a song by that name already exists and if it does ask to edit, and if not create new object
+		if (songs.containsKey(songName)){
+			Catalog.out.println("Hmm... I think you already added this song. Is this it?");
+			String objectName = songs.get(songName);
+			Catalog.out.println(objectName.toString());
+			String response = Catalog.in.readLine();
+			if (response.equalsIgnoreCase("yes")){
+				Catalog.out.println("Would you like to edit this?");
+				String response = Catalog.in.resdline();
+				if (response.equalsIgnoreCase("yes")){
+					objectName.editSong();
+				}//Close check if want to edit
+			}//Close check if same song
+		}//Close check is already added if
+		
 		Catalog.out.println("What is the name of the Artist or Composer?");
-		try {
-			Catalog.in.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
+		String songArtist = Catalog.in.readLine();
+		
+		//Try to pull up information on what type of genre they may be
+		if (songs.containsKey(songArtist) {
+			String objectName = songs.get(songArtist);
+			String genre=objectName.getGenre();
+			genre firstAddSongInput = new genre();
+		}else{
 			
 		}
 	}
 	
 	//To remove a song from the catalog
-	public void deleteSongs() {
+	public void deleteSong() {
+		
+	}
+	
+	public void editSong() {
 		
 	}
 	
@@ -64,9 +92,24 @@ public class Library {
 		
 	}
 	
+	//To Check if user wants to edit a song in database
+	public void checkIfEdit(String objectName){
+		Catalog.out.println("Would you like to edit this?");
+		String response = Catalog.in.readLine();
+		if (response.equalsIgnoreCase("yes")){//Yes? then go to edit method
+			objectName.editSong();
+		} else if (response.equalsIgnoreCase("no")){//No? then go main menu
+			break;
+		} else {//If neither then take them back to main menu
+			Catalog.out.println("I'm sorry I didn't understand: " + response + 
+					"\nI was looking for \"Yes\" or \"No\".");
+			break;
+		}//Close check if want to edit
+	}//Close checkIfEdit Method
+
 	//Constructor Method
 	public Library() {
-		
+		songs = new  HashMap<String, String>();
 	}
 	
 	
