@@ -56,11 +56,28 @@ public class Music {
 	
 	public Music(){	
 		Library.setNumberOfSongs(Library.getNumberOfSongs()+1);
-		songId=numberOfSongs;
-		
+		songId++;
+				
+	} 
+	
+	//Methods to do stuff
+	
+	public String toString(){// display all music data as a string
+		return ("\n\t"+getTitle()+"\n\t"+getGenre()+
+				"\n\tlength= "+getDuration()+
+				"\n\tComposed in"+getYear()+"\n\t"+
+				getComment()+"\n\t"+getSongId());
+
+	
+	}
+	
+	public Ar get(String dad){
+		String data = info.get(dad);
+		switch (data)
+		case title:
+			return title.get(dad)
 		
 		
 	}
-	
 
 }
