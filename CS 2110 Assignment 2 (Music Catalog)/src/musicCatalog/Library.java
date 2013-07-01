@@ -62,14 +62,15 @@ public class Library {
 		String songArtist = Catalog.in.readLine();
 		
 		//Try to pull up information on what type of genre they may be
-		if (songs.containsKey(songArtist) {
-			String objectName = songs.get(songArtist);
-			String genre=objectName.getGenre();
-			genre firstAddSongInput = new genre();
+		if (songs.containsKey(songArtist)) {
+			//Get a song of theirs and check the genre
+			Music songObject = (Music) (songs.get(songArtist));
+			String genre=songObject.getGenre();
+			newSong(genre);//Make new song object with genre telling what class to use
 		}else{
-			
-		}
-	}
+			newSong();//Make new song not knowing genre
+		}//close if to harvest genre
+	}//Close addSong method
 	
 	//To remove a song from the catalog
 	public void deleteSong() {
@@ -85,6 +86,9 @@ public class Library {
 		
 	}
 	
+	
+	
+	//To check if song title is in database
 	public void checkIfContained(String songName) throws IOException {
 		System.out.println("<--checkIfContained-->");
 		if (songs.containsKey(songName)){
@@ -96,6 +100,7 @@ public class Library {
 		}//Close check is already added if
 	}
 	
+	//To check if song is already in database
 	public void checkIfSameSong(String response,Object song) throws IOException {
 		System.out.println("<--checkIfSameSong-->");//For Debugging
 		if (response.equalsIgnoreCase("yes")){
@@ -122,7 +127,22 @@ public class Library {
 			notUnderstandable(response);
 		}//Close check if want to edit
 	}//Close checkIfEdit Method
-
+	
+	
+	//To try and harvest genre an artist makes
+	public void tryHarvest(String songArtist) {
+		if (songs.containsKey(songArtist)) {
+			//Get a song of theirs and check the genre
+			Music songObject = (Music) (songs.get(songArtist));
+			String genre=songObject.getGenre();
+			newSong(genre,songTitle, songArtist);//Make new song object with title, artist and genre telling what class to use
+		}else{
+			newSong(songTitle,songArtist);//Make new song with title, artist not knowing genre
+		}//close if to harvest genre
+	}//Close tryHarvest
+	
+	
+	//For returning an exception back to main menu
 	public void notUnderstandable(String response) {
 		System.out.println("<--notUnderstandable-->");//For Debugging
 		Catalog.out.println("I'm sorry I didn't understand: " + response + 
