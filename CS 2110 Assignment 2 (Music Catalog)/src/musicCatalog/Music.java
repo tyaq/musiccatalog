@@ -1,8 +1,9 @@
 package musicCatalog;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 
-public class Music {
+public abstract class Music {
 	
 	private static int songId=1;
 	private static String genre;
@@ -64,28 +65,30 @@ public class Music {
 	
 	//Methods to do stuff
 	
-	//Displays all uninitialized variables
-	public void askInfo() throws IllegalArgumentException, IllegalAccessException{ //ask for info not already entered
+	/*//Displays all uninitialized variables
+	public void askInfo() throws IllegalArgumentException, IllegalAccessException, IOException{ //ask for info not already entered
 		System.out.println("<--Orchestral.askInfo()-->");//For Debugging
 		for (Field f : this.getClass().getDeclaredFields()) {
 		        Class t = f.getType();
 		      	Object o = f.get(this);
 		        /*For booleans
 		        if(t == boolean.class && Boolean.FALSE.equals(v)) 
-		        {// found default value		 }*/
+		        {// found default value		 }*
 		        if(t.isPrimitive() && ((Number) o).doubleValue() == 0)
 		        {// found default value
 		        	 Catalog.out.println("What is "+f);
 		        	 Catalog.out.println("this is still not finished");
+		        	 f.set(this.getClass(), Catalog.in.readLine());
 		        }
 		        else if(!t.isPrimitive() && o == null)
 		        { // found default value
 		        	Catalog.out.println("What is "+f);
 		        	Catalog.out.println("this is still not finished");
+		        	f.set(this.getClass(), Catalog.in.readLine());
 		        }//Close if
 		}//Close for
 	}//Close askInfoMethod
-	
+	*/
 	public String toString(){// display all music data as a string
 		return ("\n\t"+getTitle()+"\n\t"+getGenre()+
 				"\n\tlength= "+getDuration()+
