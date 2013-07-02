@@ -2,6 +2,7 @@ package musicCatalog;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.lang.reflect.*;
 
 public class Library {
 	
@@ -10,6 +11,7 @@ public class Library {
 	private static int numberOfGenres = 0;
 	private String libraryName;
 	HashMap<String, Object> songs;
+	HashMap<String, Class> classes;
 	
 	//Accessory Methods
 	static int getNumberOfSongs() { //For numberOfSongs
@@ -50,6 +52,7 @@ public class Library {
 	
 	//To add a song to the catalog
 	public void addSong() throws IOException {
+		System.out.println("<--addSong()-->");
 		
 		//Ask for and Artist as a reference and the Name of the song
 		Catalog.out.println("What is the name of the Song?");
@@ -62,15 +65,16 @@ public class Library {
 		String songArtist = Catalog.in.readLine();
 		
 		//Try to pull up information on what type of genre they may be
-		if (songs.containsKey(songArtist)) {
-			//Get a song of theirs and check the genre
-			Music songObject = (Music) (songs.get(songArtist));
-			String genre=songObject.getGenre();
-			newSong(genre);//Make new song object with genre telling what class to use
-		}else{
-			newSong();//Make new song not knowing genre
-		}//close if to harvest genre
+		tryHarvest(songArtist,songName);
+		
+		//Both checks flow to newSong() to make a new object.
 	}//Close addSong method
+	
+	//Make new song object with title, artist and genre telling what class to use
+	public void newSong(Class songClass,String title, String artist) {
+		songClass j = new songClass();
+	}//Close newSong Method
+	
 	
 	//To remove a song from the catalog
 	public void deleteSong() {
@@ -96,18 +100,18 @@ public class Library {
 			Object songObject = songs.get(songName);
 			Catalog.out.println(songObject.toString());
 			String response = Catalog.in.readLine();
-			checkIfSameSong(response,songObject);
+			checkIfSameSong(response,songObject,songName);
 		}//Close check is already added if
 	}
 	
 	//To check if song is already in database
-	public void checkIfSameSong(String response,Object song) throws IOException {
+	public void checkIfSameSong(String response,Object song, String songTitle) throws IOException {
 		System.out.println("<--checkIfSameSong-->");//For Debugging
 		if (response.equalsIgnoreCase("yes")){
 			checkIfEdit(song);
 		} else if (response.equalsIgnoreCase("no")) {
-			Catalog.out.println("So this is a new song.");
-			newSong();//Call method that asks user for input on song info not knowing genre
+			Catalog.out.println("So, this is a new song.");
+			newSong(songTitle);//Call method that asks user for input of song info not knowing genre
 		} else {
 			notUnderstandable(response);
 		}//Close check if same song
@@ -115,7 +119,7 @@ public class Library {
 	
 	//To Check if user wants to edit a song in database
 	public void checkIfEdit(Object song) throws IOException{
-		System.out.println("-->Library.checkIfEdit()<--");//For Debugging
+		System.out.println("<--Library.checkIfEdit()-->");//For Debugging
 		Catalog.out.println("Would you like to edit this?");
 		String response;
 			response = Catalog.in.readLine();
@@ -130,12 +134,12 @@ public class Library {
 	
 	
 	//To try and harvest genre an artist makes
-	public void tryHarvest(String songArtist) {
+	public void tryHarvest(String songArtist,String songTitle) {
+		System.out.println("<--tryHarvest()-->");
 		if (songs.containsKey(songArtist)) {
 			//Get a song of theirs and check the genre
-			Music songObject = (Music) (songs.get(songArtist));
-			String genre=songObject.getGenre();
-			newSong(genre,songTitle, songArtist);//Make new song object with title, artist and genre telling what class to use
+			Class songClass = (songs.get(songArtist)).getClass();
+			newSong(songClass,songTitle, songArtist);//Make new song object with title, artist and genre telling what class to use
 		}else{
 			newSong(songTitle,songArtist);//Make new song with title, artist not knowing genre
 		}//close if to harvest genre
@@ -152,6 +156,7 @@ public class Library {
 	//Constructor Method
 	public Library() {
 		songs = new  HashMap<String, Object>();
+		classes = new HashMap<String, Class>();
 	}
 	
 	

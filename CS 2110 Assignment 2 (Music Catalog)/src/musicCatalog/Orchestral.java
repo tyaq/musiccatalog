@@ -6,7 +6,7 @@ public class Orchestral extends Music {
 
 	private String composer;
 	private String[] instruments;
-	private final String genre="orchestra";
+	private final String genre="orchestral";
 	//Accessory Methods
 	
 	public String getComposer(){
