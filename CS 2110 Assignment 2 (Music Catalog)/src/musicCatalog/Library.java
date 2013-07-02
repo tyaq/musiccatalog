@@ -1,8 +1,10 @@
 package musicCatalog;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.lang.reflect.*;
+
 
 public class Library {
 	
@@ -10,7 +12,8 @@ public class Library {
 	private static int numberOfSongs = 0;
 	private static int numberOfGenres = 0;
 	private String libraryName;
-	HashMap<String, Object> songs;
+	HashMap<String, String> songs;
+	ArrayList<String> spellDict;
 	HashMap<String, Class> classes;
 	
 	//Accessory Methods
@@ -77,12 +80,33 @@ public class Library {
 		System.out.println(cl);//For Debugging
 		Constructor con = cl.getConstructor(String.class,String.class);
 		Object newSong = con.newInstance(title, artist);
-		((musicCatalog.Orchestral) newSong).askInfo();
 		
 		//Askinfo
 		if (songClass.equals("Orchestral")) {
+			Orchestral orch = (Orchestral) newSong;
+			songs.put(orch.getTitle(), songs.get(orch.getTitle()) + obj);
+			songs.put(orch.getComposer(), obj.add(orch));
+			songs.put(orch.getGenre(), obj.add(orch));
+			Catalog.out.println("What year was "+orch.getTitle() + " created?");
+			String response = Catalog.in.readLine();
+			if (!(response.equalsIgnoreCase("") || response.equalsIgnoreCase("\\s+"))) {
+				orch.setYear(Integer.parseInt(Catalog.in.readLine()));
+				songs.put(response, orch);
+			}
+			Catalog.out.println("What is the duration of the song in seconds?");
+			response = Catalog.in.readLine();
+			if (!(response.equalsIgnoreCase("") || response.equalsIgnoreCase("\\s+"))) {
+				orch.setDuration(Double.parseDouble(Catalog.in.readLine()));
+				songs.put(response, orch);
+			}
+			Catalog.out.println("What is the duration of the song in seconds?");
+			response = Catalog.in.readLine();
+			if (!(response.equalsIgnoreCase("") || response.equalsIgnoreCase("\\s+"))) {
+				orch.setDuration(Double.parseDouble(Catalog.in.readLine()));
+				songs.put(response, orch);
+			}
 			
-		}
+		}//end if AskInfo
 	}//Close newSong Method
 	
 	//Make new song object with title, artist
@@ -188,7 +212,7 @@ public class Library {
 		System.out.println("<--tryHarvest()-->");
 		if (songs.containsKey(songArtist)) {
 			//Get a song of theirs and check the genre
-			Music songObject = (Music) (songs.get(songArtist));
+			Music songObject = (Music) ((songs.get(songArtist)));
 			String genre=songObject.getGenre();
 			newSong(genre,songTitle, songArtist);//Make new song object with title, artist and genre telling what class to use
 		}else{
@@ -228,7 +252,8 @@ public class Library {
 	}
 	//Constructor Method
 	public Library() {
-		songs = new  HashMap<String, Object>();
+		songs = new  HashMap<String, String>();
+		spellDict = new ArrayList<String>();
 		classes = new HashMap<String, Class>();
 	}
 	
