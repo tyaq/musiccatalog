@@ -71,8 +71,26 @@ public class Library {
 	}//Close addSong method
 	
 	//Make new song object with title, artist and genre telling what class to use
-	public void newSong(Class songClass,String title, String artist) {
-		songClass j = new songClass();
+	public void newSong(String songClass,String title, String artist) {
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+		
+		
+		
+		
+		
+		
+		
 	}//Close newSong Method
 	
 	
@@ -87,6 +105,22 @@ public class Library {
 	
 	//To check the information entered by the user
 	public void spellChecker() {
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 	}
 	
@@ -138,8 +172,9 @@ public class Library {
 		System.out.println("<--tryHarvest()-->");
 		if (songs.containsKey(songArtist)) {
 			//Get a song of theirs and check the genre
-			Class songClass = (songs.get(songArtist)).getClass();
-			newSong(songClass,songTitle, songArtist);//Make new song object with title, artist and genre telling what class to use
+			Music songObject = (Music) (songs.get(songArtist));
+			String genre=songObject.getGenre();
+			newSong(genre,songTitle, songArtist);//Make new song object with title, artist and genre telling what class to use
 		}else{
 			newSong(songTitle,songArtist);//Make new song with title, artist not knowing genre
 		}//close if to harvest genre
