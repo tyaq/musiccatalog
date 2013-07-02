@@ -1,8 +1,10 @@
 package musicCatalog;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,16 +15,17 @@ public class Catalog {
 	static BufferedReader in = new BufferedReader(isr);
 	static PrintWriter out = new PrintWriter(System.out,true);
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 
+	Library lib = new Library();
 		
+		out.println("addSong()");
+		lib.addSong();
 		String test="Another test";
 		String test2="Hello Ish";
-
-		System.out.println(test());
 	}
 	
-	public static String test(){
+	/*public static String test(){
 		HashMap<String, String> map1 = new  HashMap<String, String>();
 		String album = "a: ";
 		String song = "b: ";
@@ -38,6 +41,6 @@ public class Catalog {
 		
 		if(map1.containsKey(b+"adele"))
 			return map1.get()
-	}
+	}*/
 
 }

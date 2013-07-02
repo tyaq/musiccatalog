@@ -1,12 +1,13 @@
 package musicCatalog;
 
+import java.lang.reflect.Field;
+
 
 
 public class Orchestral extends Music {
 
 	private String composer;
 	private String[] instruments;
-	private final String genre="orchestral";
 	//Accessory Methods
 	
 	public String getComposer(){
@@ -27,14 +28,48 @@ public class Orchestral extends Music {
 	}
 
 	//Methods to do stuff
+	
+	//Displays all uninitialized variables
+	public void askInfo() throws IllegalArgumentException, IllegalAccessException{ //ask for info not already entered
+		System.out.println("<--Orchestral.askInfo()-->");//For Debugging
+		for (Field f : this.getClass().getDeclaredFields()) {
+		        Class t = f.getType();
+		      	Object o = f.get(this);
+		        /*For booleans
+		        if(t == boolean.class && Boolean.FALSE.equals(v)) 
+		        {// found default value		 }*/
+		        if(t.isPrimitive() && ((Number) o).doubleValue() == 0)
+		        {// found default value
+		        	 Catalog.out.println("What is "+f);
+		        	 Catalog.out.println("this is still not finished");
+		        }
+		        else if(!t.isPrimitive() && o == null)
+		        { // found default value
+		        	Catalog.out.println("What is "+f);
+		        	Catalog.out.println("this is still not finished");
+		        }//Close if
+		}//Close for
+	}//Close askInfoMethod
+	
 	public String toString(){// display all music data as a string
 		return (getComposer()+"\n\t"+getTitle()+"\n\t"+getGenre()+
 				"\n\tlength= "+getDuration()+"\n\tInstruments include: "+
 				getInstruments()+"\n\tComposed in"+getYear()+"\n\t"+
 				getComment()+"\n\t"+getSongId());
-		
-
-		
+	}
+	
+	//Constructors
+	public Orchestral(String title,String composer){
+		super();
+		setGenre("orchestral");
+		setTitle(title);
+		this.composer=composer;
+	}
+	
+	public Orchestral(String title){
+		super();
+		setGenre("orchestral");
+		setTitle(title);
 	}
 
 }

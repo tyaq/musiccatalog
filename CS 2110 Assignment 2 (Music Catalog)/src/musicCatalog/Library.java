@@ -51,7 +51,7 @@ public class Library {
 	}
 	
 	//To add a song to the catalog
-	public void addSong() throws IOException {
+	public void addSong() throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		System.out.println("<--addSong()-->");
 		
 		//Ask for and Artist as a reference and the Name of the song
@@ -71,28 +71,39 @@ public class Library {
 	}//Close addSong method
 	
 	//Make new song object with title, artist and genre telling what class to use
-	public void newSong(String songClass,String title, String artist) {
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
-		
-		
-		
-		
-		
-		
-		
+	public void newSong(String songClass,String title, String artist) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		System.out.println("<--Library.newSong(2args+genre)-->");
+		Class cl = Class.forName("musicCatalog."+songClass);
+		System.out.println(cl);//For Debugging
+		Constructor con = cl.getConstructor(String.class,String.class);
+		Object newSong = con.newInstance(title, artist);
+		((musicCatalog.Orchestral) newSong).askInfo();
 	}//Close newSong Method
 	
+	//Make new song object with title, artist
+	public void newSong(String title, String artist) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
+		System.out.println("<--Library.newSong(2args)-->");
+		Catalog.out.println("What is the genre? Orchestral.");
+		String songClass=Catalog.in.readLine();
+		Class cl = Class.forName("musicCatalog."+songClass);
+		System.out.println(cl);//For Debugging
+		Constructor con = cl.getConstructor(String.class,String.class);
+		Object newSong = con.newInstance(title, artist);
+		
+		((musicCatalog.Orchestral) newSong).askInfo();
+	}//Close newSong Method
+	
+	//Make new song object with title, artist
+		public void newSong(String title) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
+			System.out.println("<--Library.newSong(1args)-->");
+			Catalog.out.println("What is the genre? Orchestral.");
+			String songClass=Catalog.in.readLine();
+			Class cl = Class.forName("musicCatalog."+songClass);
+			Constructor con = cl.getConstructor(String.class,String.class);
+			Object newSong = con.newInstance(title);
+			
+			//askInfo(newSong);
+		}//Close newSong Method
 	
 	//To remove a song from the catalog
 	public void deleteSong() {
@@ -127,7 +138,7 @@ public class Library {
 	
 	
 	//To check if song title is in database
-	public void checkIfContained(String songName) throws IOException {
+	public void checkIfContained(String songName) throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		System.out.println("<--checkIfContained-->");
 		if (songs.containsKey(songName)){
 			Catalog.out.println("Hmm... I think you already added this song. Is this it?");
@@ -139,7 +150,7 @@ public class Library {
 	}
 	
 	//To check if song is already in database
-	public void checkIfSameSong(String response,Object song, String songTitle) throws IOException {
+	public void checkIfSameSong(String response,Object song, String songTitle) throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		System.out.println("<--checkIfSameSong-->");//For Debugging
 		if (response.equalsIgnoreCase("yes")){
 			checkIfEdit(song);
@@ -168,7 +179,7 @@ public class Library {
 	
 	
 	//To try and harvest genre an artist makes
-	public void tryHarvest(String songArtist,String songTitle) {
+	public void tryHarvest(String songArtist,String songTitle) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 		System.out.println("<--tryHarvest()-->");
 		if (songs.containsKey(songArtist)) {
 			//Get a song of theirs and check the genre
@@ -180,6 +191,28 @@ public class Library {
 		}//close if to harvest genre
 	}//Close tryHarvest
 	
+	/*//Displays all uninitialized variables
+	public void askInfo(Object newSong) throws IllegalArgumentException, IllegalAccessException{ //ask for info not already entered
+		System.out.println("<--Orchestral.askInfo()-->");//For Debugging
+		for (Field f : newSong.getClass().getDeclaredFields()) {
+		        Class t = f.getType();
+		      	Object o = f.get(newSong);
+		        /*For booleans
+		        if(t == boolean.class && Boolean.FALSE.equals(v)) 
+		        {// found default value		 }*
+		        if(t.isPrimitive() && ((Number) o).doubleValue() == 0)
+		        {// found default value
+		        	 Catalog.out.println("What is "+f);
+		        	 Catalog.out.println("this is still not finished");
+		        }
+		        else if(!t.isPrimitive() && o == null)
+		        { // found default value
+		        	Catalog.out.println("What is "+f);
+		        	Catalog.out.println("this is still not finished");
+		        }//Close if
+		}//Close for
+	}//Close askInfoMethod
+	*/
 	
 	//For returning an exception back to main menu
 	public void notUnderstandable(String response) {
