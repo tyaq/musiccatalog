@@ -137,26 +137,43 @@ public class Library {
 		
 	}
 	
-	//To check the information entered by the user
-	public void spellChecker() {
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	/**
+     * Returns the number of letters of the user's typed string that are common
+     * to a string already in spelldict
+     * @param String a
+     * @param String b
+     * @return integer value
+     */
+	public static int similarLetters(String a, String b){
+		String c=a.toUpperCase();
+		String d=b.toUpperCase();
+		int temp=0;
+		int i=0;
+		while (i<d.length()){
+			if (c.indexOf(d.charAt(i))!=-1){
+				temp++;}
+			i++;}
+		return temp;			
+	}
+	/**Basically a spell-checker based on the differences in lengths between 
+	 * the user's typed string and a string already in spelldict, and differences
+	 * in letters b/w them
+	 * 
+	 * @param a
+	 * @param spelldict
+	 */
+	public static void spellChecker(String a, ArrayList<String> spelldict){
+		for(int i=0; i<spelldict.size();i++){
+			if (
+					(Math.abs(spelldict.get(i).length()-a.length())<4)&&
+					(similarLetters(a,spelldict.get(i))>=spelldict.get(i).length()-2)){
+				System.out.println("Did you mean to type "+spelldict.get(i)+"\nIf so, type \"yes\"");
+			}
+		}
 		
 		
 	}
+		
 	
 	
 	
