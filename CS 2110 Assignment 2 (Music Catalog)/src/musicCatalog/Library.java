@@ -50,7 +50,7 @@ public class Library {
 	
 	//To add a song to the catalog
 	public void addSong() throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		System.out.println("<--addSong()-->");
+//		System.out.println("<--addSong()-->");
 		
 		//Ask for and Artist as a reference and the Name of the song
 		Catalog.out.println("What is the name of the Song?");
@@ -72,9 +72,9 @@ public class Library {
 	
 	//Make new song object with title, artist and genre telling what class to use
 	public void newSong(String songClass,String title, String artist) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
-		System.out.println("<--Library.newSong(2args+genre)-->");
+//		System.out.println("<--Library.newSong(2args+genre)-->");
 		Class cl = Class.forName("musicCatalog."+songClass);
-		System.out.println(cl);//For Debugging
+//		System.out.println(cl);//For Debugging
 		Constructor con = cl.getConstructor(String.class,String.class);
 		Object newSong = con.newInstance(title, artist);
 		
@@ -84,11 +84,11 @@ public class Library {
 	
 	//Make new song object with title, artist
 	public void newSong(String title, String artist) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
-		System.out.println("<--Library.newSong(2args)-->");
+//		System.out.println("<--Library.newSong(2args)-->");
 		Catalog.out.println("What is the genre? Orchestral.");
 		String songClass=cap(Catalog.in.readLine());
 		Class cl = Class.forName("musicCatalog."+songClass);
-		System.out.println(cl);//For Debugging
+//		System.out.println(cl);//For Debugging
 		Constructor con = cl.getConstructor(String.class,String.class);
 		Object newSong = con.newInstance(title, artist);
 		
@@ -98,7 +98,7 @@ public class Library {
 	
 	//Make new song object with only title
 		public void newSong(String title) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
-			System.out.println("<--Library.newSong(1args)-->");
+//			System.out.println("<--Library.newSong(1args)-->");
 			Catalog.out.println("What is the genre? Orchestral.");
 			String songClass=cap(Catalog.in.readLine());
 			Class cl = Class.forName("musicCatalog."+songClass);
@@ -111,7 +111,7 @@ public class Library {
 	
 	//To remove a song/songs or really any genre or artist from the catalog
 	public void deleteSong() throws IOException {
-		System.out.println("<--deleteSong()-->");
+//		System.out.println("<--deleteSong()-->");
 		
 		//Ask for keyword to use to delete songs
 		Catalog.out.println("What keyword do you want to use to delete data?"
@@ -167,7 +167,7 @@ public class Library {
 			if (
 					(Math.abs(spelldict.get(i).length()-a.length())<4)&&
 					(similarLetters(a,spelldict.get(i))>=spelldict.get(i).length()-2)){
-				System.out.println("Did you mean to type "+spelldict.get(i)+"\nIf so, type \"yes\"");
+				Catalog.out.println("Did you mean to type "+spelldict.get(i)+"\nIf so, type \"yes\"");
 				String input;
 				try {
 					input = Catalog.in.readLine();
@@ -187,7 +187,7 @@ public class Library {
 	
 	//To check if song title is in database
 	public void checkIfContained(String songName) throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		System.out.println("<--checkIfContained-->");
+//		System.out.println("<--checkIfContained-->");
 		if (songs.containsKey(songName)){
 			Catalog.out.println("Hmm... I think you already added this song. Is this it?");
 			Object songObject = songObj.get(parseFirstNumber(songs.get(songName)));
@@ -199,7 +199,7 @@ public class Library {
 	
 	//To check if song is already in database
 	public void checkIfSameSong(String response,Object song, String songTitle) throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		System.out.println("<--checkIfSameSong-->");//For Debugging
+//		System.out.println("<--checkIfSameSong-->");//For Debugging
 		if (response.equalsIgnoreCase("yes")){
 			checkIfEdit(song);
 		} else if (response.equalsIgnoreCase("no")) {
@@ -212,7 +212,7 @@ public class Library {
 	
 	//To Check if user wants to edit a song in database
 	public void checkIfEdit(Object song) throws IOException{
-		System.out.println("<--Library.checkIfEdit()-->");//For Debugging
+//		System.out.println("<--Library.checkIfEdit()-->");//For Debugging
 		Catalog.out.println("Would you like to edit this?");
 		String response;
 			response = Catalog.in.readLine();
@@ -228,7 +228,7 @@ public class Library {
 	
 	//To try and harvest genre an artist makes
 	public void tryHarvest(String songArtist,String songTitle) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
-		System.out.println("<--tryHarvest()-->");
+//		System.out.println("<--tryHarvest()-->");
 		if (songs.containsKey(songArtist)&&songs.get(songArtist)!=null) {
 			//Get a song of theirs and check the genre
 			Object sObject=songObj.get(parseFirstNumber(songs.get(songArtist)));
@@ -250,7 +250,7 @@ public class Library {
 	}//Close method
 	
 	public void askInfoIfOrchestral(Object newSong) throws IOException{
-		System.out.println("<--askInfoIfOrchestral-->");//For Debugging
+//		System.out.println("<--askInfoIfOrchestral-->");//For Debugging
 		Orchestral orch = (Orchestral) newSong;
 		//Add Known Info to song
 		songs.put(orch.getTitle(),songs.get(orch.getTitle())+ " " + Orchestral.getSongId());//Take current value and add this objects SongId value
@@ -302,7 +302,7 @@ public class Library {
 		numbers.trim();
 		String[] songIdString = numbers.split("\\s+");
 		int songIdGetter=Integer.parseInt(songIdString[1]);
-		System.out.println(songIdGetter);
+//		System.out.println(songIdGetter);
 		return songIdGetter;
 	}
 	
@@ -320,7 +320,7 @@ public class Library {
 	
 	//For returning an exception back to main menu
 	public void notUnderstandable(String response) {
-		System.out.println("<--notUnderstandable-->");//For Debugging
+//		System.out.println("<--notUnderstandable-->");//For Debugging
 		Catalog.out.println("I'm sorry I didn't understand: " + response + 
 				"\nI was looking for \"Yes\" or \"No\".");
 	}
