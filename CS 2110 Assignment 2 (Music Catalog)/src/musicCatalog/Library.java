@@ -85,7 +85,7 @@ public class Library {
 	//Make new song object with title, artist
 	public void newSong(String title, String artist) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 //		System.out.println("<--Library.newSong(2args)-->");
-		Catalog.out.println("What is the genre? Orchestral.");
+		Catalog.out.println("What is the genre? Choose Orchestral.");
 		String songClass=cap(Catalog.in.readLine());
 		Class cl = Class.forName("musicCatalog."+songClass);
 //		System.out.println(cl);//For Debugging
@@ -99,7 +99,7 @@ public class Library {
 	//Make new song object with only title
 		public void newSong(String title) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 //			System.out.println("<--Library.newSong(1args)-->");
-			Catalog.out.println("What is the genre? Orchestral.");
+			Catalog.out.println("What is the genre? Choose Orchestral.");
 			String songClass=cap(Catalog.in.readLine());
 			Class cl = Class.forName("musicCatalog."+songClass);
 			Constructor con = cl.getConstructor(String.class,String.class);
