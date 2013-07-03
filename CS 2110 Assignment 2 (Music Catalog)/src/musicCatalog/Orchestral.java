@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.lang.reflect.*;
 
 
-
 public class Orchestral extends Music {
 
 	private String composer;

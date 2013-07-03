@@ -18,14 +18,17 @@ public class Catalog {
 	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 
 	Library lib = new Library();
+	out.println("Welcome to Omish Music Cataloger. Right now your Library is empty.");
 		boolean run=true;
 		while (run){
-		out.println("Would You like to Add, Edit or Delete a Song?");
+		out.println("Would You like to \"Add\" or \"Delete\""
+				+ " a Song?\nAlso, you can choose to \"show\" your library and \"exit\" the program.");
 		String choose = in.readLine().toUpperCase();
 		if(choose.equalsIgnoreCase("add")){
 			lib.addSong();
 		}else if (choose.equalsIgnoreCase("edit")){
 			//lib.editSong();
+			run=false;
 		}else if (choose.equalsIgnoreCase("delete")){
 			lib.deleteSong();
 		}else if (choose.equalsIgnoreCase("show")){
@@ -34,23 +37,7 @@ public class Catalog {
 			run=false;
 		}
 		}
+		out.println("Goodbye!");
 	}//Close main
-	/*public static String test(){
-		HashMap<String, String> map1 = new  HashMap<String, String>();
-		String album = "a: ";
-		String song = "b: ";
-		
-		
-		map1.put(a+"adele", "21");
-		map1.put(b+"adele", "21");
-		
-		if (map1.containsKey(a+"adele"))	
-		map1.put(a+"adele", album.add(song))
-		
-		return map1.get("adele");
-		
-		if(map1.containsKey(b+"adele"))
-			return map1.get()
-	}*/
-
+	
 }
