@@ -18,13 +18,23 @@ public class Catalog {
 	public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 
 	Library lib = new Library();
-		
-		out.println("addSong()");
-		lib.addSong();
-		String test="Another test";
-		String test2="Hello Ish";
-	}
-	
+		boolean run=true;
+		while (run){
+		out.println("Would You like to Add, Edit or Delete a Song?");
+		String choose = in.readLine().toUpperCase();
+		if(choose.equalsIgnoreCase("add")){
+			lib.addSong();
+		}else if (choose.equalsIgnoreCase("edit")){
+			//lib.editSong();
+		}else if (choose.equalsIgnoreCase("delete")){
+			lib.deleteSong();
+		}else if (choose.equalsIgnoreCase("show")){
+			Catalog.out.println(lib.songObj.toString());
+		}else if (choose.equalsIgnoreCase("exit")){
+			run=false;
+		}
+		}
+	}//Close main
 	/*public static String test(){
 		HashMap<String, String> map1 = new  HashMap<String, String>();
 		String album = "a: ";

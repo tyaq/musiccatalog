@@ -14,7 +14,7 @@ public class Library {
 	private String libraryName;
 	HashMap<String, String> songs;
 	ArrayList<String> spellDict;
-	HashMap<String, Class> classes;
+	HashMap<Integer, Object> songObj;
 	
 	//Accessory Methods
 	static int getNumberOfSongs() { //For numberOfSongs
@@ -59,13 +59,13 @@ public class Library {
 		
 		//Ask for and Artist as a reference and the Name of the song
 		Catalog.out.println("What is the name of the Song?");
-		String songName = Catalog.in.readLine();
+		String songName = cap(Catalog.in.readLine());
 		
 		//Check to see if a song by that name already exists and if it does ask to edit, and if not create new object
 		checkIfContained(songName);
 		
 		Catalog.out.println("What is the name of the Artist or Composer?");
-		String songArtist = Catalog.in.readLine();
+		String songArtist = cap(Catalog.in.readLine());
 		
 		//Try to pull up information on what type of genre they may be
 		tryHarvest(songArtist,songName);
@@ -81,62 +81,56 @@ public class Library {
 		Constructor con = cl.getConstructor(String.class,String.class);
 		Object newSong = con.newInstance(title, artist);
 		
-		//Askinfo
-		if (songClass.equals("Orchestral")) {
-			Orchestral orch = (Orchestral) newSong;
-			songs.put(orch.getTitle(), songs.get(orch.getTitle()) + obj);
-			songs.put(orch.getComposer(), obj.add(orch));
-			songs.put(orch.getGenre(), obj.add(orch));
-			Catalog.out.println("What year was "+orch.getTitle() + " created?");
-			String response = Catalog.in.readLine();
-			if (!(response.equalsIgnoreCase("") || response.equalsIgnoreCase("\\s+"))) {
-				orch.setYear(Integer.parseInt(Catalog.in.readLine()));
-				songs.put(response, orch);
-			}
-			Catalog.out.println("What is the duration of the song in seconds?");
-			response = Catalog.in.readLine();
-			if (!(response.equalsIgnoreCase("") || response.equalsIgnoreCase("\\s+"))) {
-				orch.setDuration(Double.parseDouble(Catalog.in.readLine()));
-				songs.put(response, orch);
-			}
-			Catalog.out.println("What is the duration of the song in seconds?");
-			response = Catalog.in.readLine();
-			if (!(response.equalsIgnoreCase("") || response.equalsIgnoreCase("\\s+"))) {
-				orch.setDuration(Double.parseDouble(Catalog.in.readLine()));
-				songs.put(response, orch);
-			}
-			
-		}//end if AskInfo
+		//Fill in data for new song
+		askInfo(songClass,newSong);
 	}//Close newSong Method
 	
 	//Make new song object with title, artist
 	public void newSong(String title, String artist) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 		System.out.println("<--Library.newSong(2args)-->");
 		Catalog.out.println("What is the genre? Orchestral.");
-		String songClass=Catalog.in.readLine();
+		String songClass=cap(Catalog.in.readLine());
 		Class cl = Class.forName("musicCatalog."+songClass);
 		System.out.println(cl);//For Debugging
 		Constructor con = cl.getConstructor(String.class,String.class);
 		Object newSong = con.newInstance(title, artist);
 		
-		((musicCatalog.Orchestral) newSong).askInfo();
+		//Fill in data for new song
+		askInfo(songClass,newSong);
 	}//Close newSong Method
 	
-	//Make new song object with title, artist
+	//Make new song object with only title
 		public void newSong(String title) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 			System.out.println("<--Library.newSong(1args)-->");
 			Catalog.out.println("What is the genre? Orchestral.");
-			String songClass=Catalog.in.readLine();
+			String songClass=cap(Catalog.in.readLine());
 			Class cl = Class.forName("musicCatalog."+songClass);
 			Constructor con = cl.getConstructor(String.class,String.class);
 			Object newSong = con.newInstance(title);
 			
-			//askInfo(newSong);
+			//Fill in data for new song
+			askInfo(songClass,newSong);
 		}//Close newSong Method
 	
-	//To remove a song from the catalog
-	public void deleteSong() {
+	//To remove a song/songs or really any genre or artist from the catalog
+	public void deleteSong() throws IOException {
+		System.out.println("<--deleteSong()-->");
 		
+		//Ask for keyword to use to delete songs
+		Catalog.out.println("What keyword do you want to use to delete data?"
+				+ "\nNote Keywords must be exact to work. For example if you"
+				+ " wanted to remove all songs of the genre orchestral you must"
+				+ " enter \"Orchestral\".");
+		String search = cap(Catalog.in.readLine());
+		if (songs.containsKey(search)){
+			for(int i=0; i<(parseSongIds(songs.get(search))).length;i++) {
+			songObj.remove((parseSongIds(songs.get(search)))[i]);
+			}//close for
+			songs.remove(search);
+		}//close if
+		else {
+			Catalog.out.println("Nothing resembling "+search+" was found in your library.");
+		}
 	}
 	
 	public void editSong(Object song) {
@@ -171,9 +165,9 @@ public class Library {
 		System.out.println("<--checkIfContained-->");
 		if (songs.containsKey(songName)){
 			Catalog.out.println("Hmm... I think you already added this song. Is this it?");
-			Object songObject = songs.get(songName);
+			Object songObject = songObj.get(parseFirstNumber(songs.get(songName)));
 			Catalog.out.println(songObject.toString());
-			String response = Catalog.in.readLine();
+			String response = cap(Catalog.in.readLine());
 			checkIfSameSong(response,songObject,songName);
 		}//Close check is already added if
 	}
@@ -210,15 +204,73 @@ public class Library {
 	//To try and harvest genre an artist makes
 	public void tryHarvest(String songArtist,String songTitle) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 		System.out.println("<--tryHarvest()-->");
-		if (songs.containsKey(songArtist)) {
+		if (songs.containsKey(songArtist)&&songs.get(songArtist)!=null) {
 			//Get a song of theirs and check the genre
-			Music songObject = (Music) ((songs.get(songArtist)));
-			String genre=songObject.getGenre();
+			Object sObject=songObj.get(parseFirstNumber(songs.get(songArtist)));
+			Music songObject = (Music) (sObject);
+			String genre=cap(songObject.getGenre());
 			newSong(genre,songTitle, songArtist);//Make new song object with title, artist and genre telling what class to use
 		}else{
 			newSong(songTitle,songArtist);//Make new song with title, artist not knowing genre
 		}//close if to harvest genre
 	}//Close tryHarvest
+	
+
+	//Ask info to fill out song info
+	public void askInfo(String songClass,Object newSong) throws IOException{
+		//Check if object is an orchestra object
+		if (songClass.equals("Orchestral")) {
+			askInfoIfOrchestral(newSong);
+		}//end if AskInfo Orchestra
+	}//Close method
+	
+	public void askInfoIfOrchestral(Object newSong) throws IOException{
+		System.out.println("<--askInfoIfOrchestral-->");//For Debugging
+		Orchestral orch = (Orchestral) newSong;
+		//Add Known Info to song
+		songs.put(orch.getTitle(),songs.get(orch.getTitle())+ " " + Orchestral.getSongId());//Take current value and add this objects SongId value
+		songs.put(orch.getComposer(),songs.get(orch.getComposer())+ " " + Orchestral.getSongId());
+		songs.put(orch.getGenre(),songs.get(orch.getGenre())+ " " + Orchestral.getSongId());
+		//Add title and composer to spellcheck
+		spellDict.add(orch.getTitle());
+		spellDict.add(orch.getComposer());
+		//Ask and add unknown info for this object
+		Catalog.out.println("What year was "+orch.getTitle() + " written?");
+		String response = Catalog.in.readLine();
+		if (!(response.equalsIgnoreCase("") || response.equalsIgnoreCase("\\s+"))) {
+			orch.setYear(Integer.parseInt(response));
+			songs.put(response,songs.get(orch.getYear())+ " " + Orchestral.getSongId());
+		}//Close if
+		Catalog.out.println("What is the duration of the song in seconds?");
+		response = Catalog.in.readLine();
+		if (!(response.equalsIgnoreCase("") || response.equalsIgnoreCase("\\s+"))) {
+			orch.setDuration(Double.parseDouble(response));
+			songs.put(response,songs.get(orch.getDuration())+ " " + Orchestral.getSongId());
+		}
+		Catalog.out.println("What are the instraments used?"
+				+ " Enter them on seperate lines and when your done enter an empty line.");
+		boolean enteringData=true;
+		ArrayList<String> temp= new ArrayList<String>(); 
+		while (enteringData) {
+			response = Catalog.in.readLine().toUpperCase();
+			enteringData = !(response.equalsIgnoreCase("") || response.equalsIgnoreCase("\\s+"));
+			if (enteringData) {
+				temp.add(response);
+			}//Close if
+		}//Close for
+		if (!(temp.isEmpty())) { //Only parse if necessary
+		String[] ttemp = temp.toArray(new String[temp.size()]);
+		orch.setInstruments(ttemp);
+		}
+		Catalog.out.println("Enter any notes you would like to attach to this song, or leave it blank.");
+		response = Catalog.in.readLine();
+		if (!(response.equalsIgnoreCase("") || response.equalsIgnoreCase("\\s+"))) {
+			orch.setComment(response);
+		}//Close if
+		//Add id to song reference
+		songObj.put(Orchestral.getSongId(), orch);
+	}//Close method askInfoIfOrchestra
+	
 	
 	/*//Displays all uninitialized variables
 	public void askInfo(Object newSong) throws IllegalArgumentException, IllegalAccessException{ //ask for info not already entered
@@ -243,6 +295,25 @@ public class Library {
 	}//Close askInfoMethod
 	*/
 	
+	public int parseFirstNumber(String numbers) {
+		numbers.trim();
+		String[] songIdString = numbers.split("\\s+");
+		int songIdGetter=Integer.parseInt(songIdString[1]);
+		System.out.println(songIdGetter);
+		return songIdGetter;
+	}
+	
+	public int[] parseSongIds(String numbers) {
+		numbers.trim();
+		String[] songIdString = numbers.split("\\s+");
+		int[] songIds=new int[songIdString.length];
+		for(int i=1;i<songIdString.length;i++){	
+		int temp=Integer.parseInt(songIdString[i]);
+		songIds[i]=temp;
+		}
+		return songIds;
+	}
+	
 	//For returning an exception back to main menu
 	public void notUnderstandable(String response) {
 		System.out.println("<--notUnderstandable-->");//For Debugging
@@ -250,11 +321,16 @@ public class Library {
 				"\nI was looking for \"Yes\" or \"No\".");
 		promptMain();
 	}
+	//Capitalizes a String
+	public String cap (String s){
+		if (s.length() == 0) return s;
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+	}
 	//Constructor Method
 	public Library() {
 		songs = new  HashMap<String, String>();
 		spellDict = new ArrayList<String>();
-		classes = new HashMap<String, Class>();
+		songObj = new HashMap<Integer, Object>();
 	}
 	
 	
