@@ -48,11 +48,6 @@ public class Library {
 		
 	}
 	
-	//For asking what the user wants to do like a main menu
-	public void promptMain() {
-		
-	}
-	
 	//To add a song to the catalog
 	public void addSong() throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		System.out.println("<--addSong()-->");
@@ -60,12 +55,14 @@ public class Library {
 		//Ask for and Artist as a reference and the Name of the song
 		Catalog.out.println("What is the name of the Song?");
 		String songName = cap(Catalog.in.readLine());
+		songName=spellChecker(songName,spellDict);
 		
 		//Check to see if a song by that name already exists and if it does ask to edit, and if not create new object
 		checkIfContained(songName);
 		
 		Catalog.out.println("What is the name of the Artist or Composer?");
 		String songArtist = cap(Catalog.in.readLine());
+		songArtist=spellChecker(songArtist,spellDict);
 		
 		//Try to pull up information on what type of genre they may be
 		tryHarvest(songArtist,songName);
@@ -122,6 +119,7 @@ public class Library {
 				+ " wanted to remove all songs of the genre orchestral you must"
 				+ " enter \"Orchestral\".");
 		String search = cap(Catalog.in.readLine());
+		search =spellChecker(search,spellDict);
 		if (songs.containsKey(search)){
 			for(int i=0; i<(parseSongIds(songs.get(search))).length;i++) {
 			songObj.remove((parseSongIds(songs.get(search)))[i]);
@@ -133,6 +131,7 @@ public class Library {
 		}
 	}
 	
+	//For future
 	public void editSong(Object song) {
 		
 	}
@@ -161,18 +160,27 @@ public class Library {
 	 * 
 	 * @param a
 	 * @param spelldict
+	 * @throws IOException 
 	 */
-	public static void spellChecker(String a, ArrayList<String> spelldict){
+	public String spellChecker(String a, ArrayList<String> spelldict) {
 		for(int i=0; i<spelldict.size();i++){
 			if (
 					(Math.abs(spelldict.get(i).length()-a.length())<4)&&
 					(similarLetters(a,spelldict.get(i))>=spelldict.get(i).length()-2)){
 				System.out.println("Did you mean to type "+spelldict.get(i)+"\nIf so, type \"yes\"");
-			}
-		}
-		
-		
-	}
+				String input;
+				try {
+					input = Catalog.in.readLine();
+				} catch (IOException e) {
+					input="no";
+				}
+				if (input.equalsIgnoreCase("yes")) {
+					a=spelldict.get(i);
+				}//Close if
+			}//Close if
+		}//close if
+		return a;
+	}//Close method
 		
 	
 	
@@ -211,7 +219,7 @@ public class Library {
 		if (response.equalsIgnoreCase("yes")){//Yes? then go to edit method
 			editSong(song);
 		} else if (response.equalsIgnoreCase("no")){//No? then go main menu
-			promptMain();
+			
 		} else {//If neither then take them back to main menu
 			notUnderstandable(response);
 		}//Close check if want to edit
@@ -264,7 +272,7 @@ public class Library {
 			orch.setDuration(Double.parseDouble(response));
 			songs.put(response,songs.get(orch.getDuration())+ " " + Orchestral.getSongId());
 		}
-		Catalog.out.println("What are the instraments used?"
+		Catalog.out.println("What are the instruments used?"
 				+ " Enter them on seperate lines and when your done enter an empty line.");
 		boolean enteringData=true;
 		ArrayList<String> temp= new ArrayList<String>(); 
@@ -289,29 +297,7 @@ public class Library {
 	}//Close method askInfoIfOrchestra
 	
 	
-	/*//Displays all uninitialized variables
-	public void askInfo(Object newSong) throws IllegalArgumentException, IllegalAccessException{ //ask for info not already entered
-		System.out.println("<--Orchestral.askInfo()-->");//For Debugging
-		for (Field f : newSong.getClass().getDeclaredFields()) {
-		        Class t = f.getType();
-		      	Object o = f.get(newSong);
-		        /*For booleans
-		        if(t == boolean.class && Boolean.FALSE.equals(v)) 
-		        {// found default value		 }*
-		        if(t.isPrimitive() && ((Number) o).doubleValue() == 0)
-		        {// found default value
-		        	 Catalog.out.println("What is "+f);
-		        	 Catalog.out.println("this is still not finished");
-		        }
-		        else if(!t.isPrimitive() && o == null)
-		        { // found default value
-		        	Catalog.out.println("What is "+f);
-		        	Catalog.out.println("this is still not finished");
-		        }//Close if
-		}//Close for
-	}//Close askInfoMethod
-	*/
-	
+	//for getting a song id
 	public int parseFirstNumber(String numbers) {
 		numbers.trim();
 		String[] songIdString = numbers.split("\\s+");
@@ -320,6 +306,7 @@ public class Library {
 		return songIdGetter;
 	}
 	
+	//For getting song ids
 	public int[] parseSongIds(String numbers) {
 		numbers.trim();
 		String[] songIdString = numbers.split("\\s+");
@@ -336,7 +323,6 @@ public class Library {
 		System.out.println("<--notUnderstandable-->");//For Debugging
 		Catalog.out.println("I'm sorry I didn't understand: " + response + 
 				"\nI was looking for \"Yes\" or \"No\".");
-		promptMain();
 	}
 	//Capitalizes a String
 	public String cap (String s){
