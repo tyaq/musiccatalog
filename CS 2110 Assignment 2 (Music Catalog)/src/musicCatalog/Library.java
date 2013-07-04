@@ -1,14 +1,28 @@
+/**
+ * Class with all the methods used to mutate user data and store it
+ */
+
 package musicCatalog;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.lang.reflect.*;
 
 
-public class Library {
+public class Library implements Serializable{
 	
-	//Declare Variables To Hold Information About the Library 
+	/**
+	 * 
+	 */
+	//Declare Variables To Hold Information About the Library
+	private static final long serialVersionUID = -5504868398542305775L;
 	private static int numberOfSongs = 0;
 	private static int numberOfGenres = 0;
 	private String libraryName;
@@ -39,16 +53,80 @@ public class Library {
 	}
 	
 	//For working on existing catalog
-	public void importLibrary(String filepath) {
+	/**
+	 * 
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public void importLibrary() throws IOException, ClassNotFoundException {
+		//Ask user for either a file path of existing library
+					Catalog.out.println("Give the path of a file to import your library or leave it empty.");
+					String inputFilePath=Catalog.in.readLine();
+					
+				//Checks if file exists	
+					File file = new File(inputFilePath);
+					if (file.exists() && file.canRead()) {
+							FileInputStream fis = new FileInputStream(inputFilePath);
+					        ObjectInputStream ois = new ObjectInputStream(fis);
+					        
+					        songs = (HashMap<String, String>) (ois.readObject());
+					        spellDict=(ArrayList<String>) (ois.readObject());
+					        songObj =(HashMap<Integer, Object>) ois.readObject();
+					        fis.close();
+					        Catalog.out.println("Your library has been loaded.\n");
+						}
 		
 	}
 	
 	//For saving out catalog
-	public void exportLibrary() {
+	/**
+	 * 
+	 * @throws IOException
+	 */
+	public void exportLibrary() throws IOException {
+		Catalog.out.println("Do you want to save these stats? (\"yes\" or \"no\")");
+		String response=Catalog.in.readLine();
+		if(response.equals("no")) {
+			System.out.println("OK. Thank you for using Omish Music Cataloger.");
 		
+		} else if (response.equals("yes")){
+			Catalog.out.println("Write File path to save your library.");
+			String outputFileName=Catalog.in.readLine();
+			File file = new File(outputFileName);
+			file.createNewFile();
+			FileOutputStream fos = null;
+		    ObjectOutputStream oos = null;
+				
+				try {
+			        fos = new FileOutputStream(outputFileName,false);
+			        oos = new ObjectOutputStream(fos);
+			        oos.writeObject(songs);
+			        oos.writeObject(spellDict);
+			        oos.writeObject(songObj);
+			        oos.close();
+			        System.out.println("Library saved. Thank you for using Omish Music Cataloger");
+			    } catch (IOException ex) {
+			        ex.printStackTrace();
+			    }
+				System.out.println("You can find it encryped at " + outputFileName + ". You will need it to import your library later.");
+		} else {
+			Catalog.out.println("Sorry i didn't understand you, but thank you" +
+					" for using Omish Music Cataloger.");
+		}
 	}
 	
 	//To add a song to the catalog
+	/**
+	 * 
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
 	public void addSong() throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 //		System.out.println("<--addSong()-->");
 		
@@ -71,6 +149,20 @@ public class Library {
 	}//Close addSong method
 	
 	//Make new song object with title, artist and genre telling what class to use
+	/**
+	 * 
+	 * @param songClass
+	 * @param title
+	 * @param artist
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws IOException
+	 */
 	public void newSong(String songClass,String title, String artist) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 //		System.out.println("<--Library.newSong(2args+genre)-->");
 		Class cl = Class.forName("musicCatalog."+songClass);
@@ -83,6 +175,19 @@ public class Library {
 	}//Close newSong Method
 	
 	//Make new song object with title, artist
+	/**
+	 * 
+	 * @param title
+	 * @param artist
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws IOException
+	 */
 	public void newSong(String title, String artist) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 //		System.out.println("<--Library.newSong(2args)-->");
 		Catalog.out.println("What is the genre? Choose Orchestral.");
@@ -97,6 +202,18 @@ public class Library {
 	}//Close newSong Method
 	
 	//Make new song object with only title
+	/**
+	 * 
+	 * @param title
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws IOException
+	 */
 		public void newSong(String title) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 //			System.out.println("<--Library.newSong(1args)-->");
 			Catalog.out.println("What is the genre? Choose Orchestral.");
@@ -110,6 +227,10 @@ public class Library {
 		}//Close newSong Method
 	
 	//To remove a song/songs or really any genre or artist from the catalog
+		/**
+		 * 
+		 * @throws IOException
+		 */
 	public void deleteSong() throws IOException {
 //		System.out.println("<--deleteSong()-->");
 		
@@ -132,6 +253,10 @@ public class Library {
 	}
 	
 	//For future
+	/**
+	 * 
+	 * @param song
+	 */
 	public void editSong(Object song) {
 		
 	}
@@ -186,6 +311,18 @@ public class Library {
 	
 	
 	//To check if song title is in database
+	/**
+	 * 
+	 * @param songName
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
 	public void checkIfContained(String songName) throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 //		System.out.println("<--checkIfContained-->");
 		if (songs.containsKey(songName)){
@@ -198,6 +335,20 @@ public class Library {
 	}
 	
 	//To check if song is already in database
+	/**
+	 * 
+	 * @param response
+	 * @param song
+	 * @param songTitle
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
 	public void checkIfSameSong(String response,Object song, String songTitle) throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 //		System.out.println("<--checkIfSameSong-->");//For Debugging
 		if (response.equalsIgnoreCase("yes")){
@@ -210,6 +361,11 @@ public class Library {
 		}//Close check if same song
 	}//Close checkIfSameSong method
 	
+	/**
+	 * 
+	 * @param song
+	 * @throws IOException
+	 */
 	//To Check if user wants to edit a song in database
 	public void checkIfEdit(Object song) throws IOException{
 //		System.out.println("<--Library.checkIfEdit()-->");//For Debugging
@@ -225,7 +381,19 @@ public class Library {
 		}//Close check if want to edit
 	}//Close checkIfEdit Method
 	
-	
+	/**
+	 * 
+	 * @param songArtist
+	 * @param songTitle
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws IOException
+	 */
 	//To try and harvest genre an artist makes
 	public void tryHarvest(String songArtist,String songTitle) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 //		System.out.println("<--tryHarvest()-->");
@@ -240,7 +408,12 @@ public class Library {
 		}//close if to harvest genre
 	}//Close tryHarvest
 	
-
+	/**
+	 * 
+	 * @param songClass
+	 * @param newSong
+	 * @throws IOException
+	 */
 	//Ask info to fill out song info
 	public void askInfo(String songClass,Object newSong) throws IOException{
 		//Check if object is an orchestra object
@@ -249,6 +422,11 @@ public class Library {
 		}//end if AskInfo Orchestra
 	}//Close method
 	
+	/**
+	 * 
+	 * @param newSong
+	 * @throws IOException
+	 */
 	public void askInfoIfOrchestral(Object newSong) throws IOException{
 //		System.out.println("<--askInfoIfOrchestral-->");//For Debugging
 		Orchestral orch = (Orchestral) newSong;
@@ -296,7 +474,11 @@ public class Library {
 		songObj.put(Orchestral.getSongId(), orch);
 	}//Close method askInfoIfOrchestra
 	
-	
+	/**
+	 * 
+	 * @param numbers
+	 * @return
+	 */
 	//for getting a song id
 	public int parseFirstNumber(String numbers) {
 		numbers.trim();
@@ -306,6 +488,11 @@ public class Library {
 		return songIdGetter;
 	}
 	
+	/**
+	 * 
+	 * @param numbers
+	 * @return
+	 */
 	//For getting song ids
 	public int[] parseSongIds(String numbers) {
 		numbers.trim();
@@ -318,17 +505,28 @@ public class Library {
 		return songIds;
 	}
 	
+	/**
+	 * 
+	 * @param response
+	 */
 	//For returning an exception back to main menu
 	public void notUnderstandable(String response) {
 //		System.out.println("<--notUnderstandable-->");//For Debugging
 		Catalog.out.println("I'm sorry I didn't understand: " + response + 
 				"\nI was looking for \"Yes\" or \"No\".");
 	}
+	
+	/**
+	 * 
+	 * @param s
+	 * @return
+	 */
 	//Capitalizes a String
 	public String cap (String s){
 		if (s.length() == 0) return s;
         return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
 	}
+	
 	//Constructor Method
 	public Library() {
 		songs = new  HashMap<String, String>();

@@ -1,10 +1,16 @@
+/**
+ * Abstract class with info common to all music
+ */
 package musicCatalog;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
+import java.io.Serializable;
 
-public abstract class Music {
-	
+public abstract class Music implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6877832299661717960L;
 	private static int songId=1;
 	private static String genre;
 	private String title;

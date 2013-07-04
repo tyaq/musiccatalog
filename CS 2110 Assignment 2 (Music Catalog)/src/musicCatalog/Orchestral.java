@@ -1,11 +1,15 @@
+/**
+ * Class for orchestral music types
+ */
 package musicCatalog;
-
-import java.io.IOException;
-import java.lang.reflect.*;
 
 
 public class Orchestral extends Music {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8728548250496604436L;
 	private String composer;
 	private String[] instruments;
 	//Accessory Methods
@@ -29,10 +33,10 @@ public class Orchestral extends Music {
 
 	//Methods to do stuff
 	
-	public String toString(){// display all music data as a string
+	public String toString(){// display all music data as a string. this can be improved
 		return (getComposer()+"\n\t"+getTitle()+"\n\t"+getGenre()+
 				"\n\tlength "+getDuration()+"s\n\tInstruments include: "+
-				getInstruments()+"\n\tComposed in "+getYear()+"\n\t"+ "Note: " +
+				toString(getInstruments())+"\n\tComposed in "+getYear()+"\n\t"+ "Note: " +
 				getComment()+"\n\tSongId: "+getSongId())+"\n\n";
 	}
 	
