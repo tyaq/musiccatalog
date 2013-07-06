@@ -84,12 +84,12 @@ public class Library implements Serializable{
 	 * @throws IOException
 	 */
 	public void exportLibrary() throws IOException {
-		Catalog.out.println("Do you want to save these stats? (\"yes\" or \"no\")");
+		Catalog.out.println("Do you want to save this library? (\"yes\" or \"no\")");
 		String response=Catalog.in.readLine();
 		if(response.equals("no")) {
 			System.out.println("OK. Thank you for using Omish Music Cataloger.");
 		
-		} else if (response.equals("yes")){
+		} else if (response.equalsIgnoreCase("yes")){
 			Catalog.out.println("Write File path to save your library.");
 			String outputFileName=Catalog.in.readLine();
 			File file = new File(outputFileName);

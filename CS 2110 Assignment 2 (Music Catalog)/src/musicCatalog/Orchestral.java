@@ -36,7 +36,7 @@ public class Orchestral extends Music {
 	public String toString(){// display all music data as a string. this can be improved
 		return (getComposer()+"\n\t"+getTitle()+"\n\t"+getGenre()+
 				"\n\tlength "+getDuration()+"s\n\tInstruments include: "+
-				toString(getInstruments())+"\n\tComposed in "+getYear()+"\n\t"+ "Note: " +
+				getInstruments()+"\n\tComposed in "+getYear()+"\n\t"+ "Note: " +
 				getComment()+"\n\tSongId: "+getSongId())+"\n\n";
 	}
 	
